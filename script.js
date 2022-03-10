@@ -19,7 +19,7 @@ class Model {
   }
 
   deleteTodo(id) {
-    this.todos.filter((todo) => todo.id !== id);
+    this.todos = this.todos.filter((todo) => todo.id !== id);
   }
 
   toggleTodo(id) {
@@ -30,6 +30,16 @@ class Model {
 
 class View {
   constructor() {}
+
+  createElement(tag, className) {
+    const element = document.createElement(tag);
+    if (className) element.classList.add(className);
+    return element;
+  }
+
+  getElement(selector) {
+    return document.querySelector(selector);
+  }
 }
 
 class Controller {
