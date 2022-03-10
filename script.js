@@ -29,7 +29,28 @@ class Model {
 }
 
 class View {
-  constructor() {}
+  constructor() {
+    this.app = this.getElement('#root');
+
+    this.title = this.createElement('h1');
+    this.title.textContext = 'Todos';
+
+    this.form = this.createElement('form');
+
+    this.input = this.createElement('input');
+    this.input.type = 'text';
+    this.input.placeholder = 'Add Todo';
+    this.input.name = 'todo';
+
+    this.submitButton = this.createElement('button');
+    this.submitButton.textContext = 'Submit';
+
+    this.todoList = this.createElement('ul', 'todo-list');
+
+    this.form.append(this.input, this.submitButton);
+
+    this.app.append(this.title, this.form, this.todoList);
+  }
 
   createElement(tag, className) {
     const element = document.createElement(tag);
