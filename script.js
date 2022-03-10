@@ -70,7 +70,7 @@ class View {
     this.input.value = '';
   }
 
-  displayTodos() {
+  displayTodos(todos) {
     while (this.todoList.firstChild) {
       this.todoList.removeChild(this.todoList.lastChild);
     }
