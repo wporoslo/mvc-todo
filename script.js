@@ -17,7 +17,7 @@ class Model {
 
   addTodo(todoText) {
     this.todos.push({
-      id: this.generateId(),
+      id: this._generateId(),
       text: todoText,
       complete: false,
     });
@@ -51,6 +51,8 @@ class Model {
 
 class View {
   constructor() {
+    this._temporaryTodoText = '';
+
     this.app = this.getElement('#root');
 
     this.title = this.createElement('h1');
@@ -71,6 +73,24 @@ class View {
     this.form.append(this.input, this.submitButton);
 
     this.app.append(this.title, this.form, this.todoList);
+
+    this._initLocalListeners();
+  }
+
+  _initLocalListeners() {
+    this.todoList.addEventListener('input', (event) => {
+      if (event.target.className === 'editable') {
+        this._temporaryTodoText = event.target.innerText;
+      }
+    });
+  }
+
+  _resetInput() {
+    this.input.value = '';
+  }
+
+  get _todoText() {
+    return this.input.value;
   }
 
   createElement(tag, className) {
@@ -81,14 +101,6 @@ class View {
 
   getElement(selector) {
     return document.querySelector(selector);
-  }
-
-  get _todoText() {
-    return this.input.value;
-  }
-
-  _resetInput() {
-    this.input.value = '';
   }
 
   displayTodos(todos) {
@@ -159,6 +171,17 @@ class View {
       }
     });
   }
+
+  //'focusout' to prevent re-rendering on every keystroke
+  bindEditTodo(handler) {
+    this.todoList.addEventListener('focusout', event => {
+      if (this._temporaryTodoText) {
+        const id = event.target.parentElement.id;
+        handler(id, this._temporaryTodoText);
+        this._temporaryTodoText = '';
+      }
+    })
+  }
 }
 
 class Controller {
@@ -170,6 +193,7 @@ class Controller {
     this.view.bindAddTodo(this.handleAddTodo);
     this.view.bindDeleteTodo(this.handleDeleteTodo);
     this.view.bindToggleTodo(this.handleToggleTodo);
+    this.view.bindEditTodo(this.handleEditTodo);
     this.model.bindTodoListChanged(this.onTodoListChanged);
   }
 
