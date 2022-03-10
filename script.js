@@ -33,7 +33,7 @@ class View {
     this.app = this.getElement('#root');
 
     this.title = this.createElement('h1');
-    this.title.textContext = 'Todos';
+    this.title.textContent = 'Todos';
 
     this.form = this.createElement('form');
 
@@ -43,7 +43,7 @@ class View {
     this.input.name = 'todo';
 
     this.submitButton = this.createElement('button');
-    this.submitButton.textContext = 'Submit';
+    this.submitButton.textContent = 'Submit';
 
     this.todoList = this.createElement('ul', 'todo-list');
 
