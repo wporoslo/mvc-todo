@@ -1,9 +1,18 @@
 class Model {
   constructor() {
-    this.todos = [
-      { id: this.generateId(), text: 'Run a marathon', complete: false },
-      { id: this.generateId(), text: 'Learn MVC architecture', complete: false },
-    ];
+    this.todos = JSON.parse(localStorage.getItem('todos')) || [];
+  }
+
+  _generateId() {
+    return crypto.randomUUID();
+  }
+  _getTodo(id) {
+    return this.todos.find((todo) => todo.id === id);
+  }
+
+  _commit(todos) {
+    this.onTodoListChanged(todos);
+    localStorage.setItem('todos', JSON.stringify(todos));
   }
 
   addTodo(todoText) {
@@ -13,38 +22,30 @@ class Model {
       complete: false,
     });
 
-    this.onTodoListChanged(this.todos);
+    this._commit(this.todos);
   }
 
   editTodo(id, updatedText) {
     this._getTodo(id).text = updatedText;
 
-    this.onTodoListChanged(this.todos);
+    this._commit(this.todos);
   }
 
   deleteTodo(id) {
     this.todos = this.todos.filter((todo) => todo.id !== id);
 
-    this.onTodoListChanged(this.todos);
+    this._commit(this.todos);
   }
 
   toggleTodo(id) {
     const todo = this._getTodo(id);
     todo.complete = !todo.complete;
 
-    this.onTodoListChanged(this.todos);
+    this._commit(this.todos);
   }
 
   bindTodoListChanged(callback) {
-    this.onTodoListChanged = callback;
-  }
-
-  _getTodo(id) {
-    return this.todos.find(todo => todo.id === id)
-  }
-
-  _generateId() {
-    return crypto.randomUUID()
+    this._commit = callback;
   }
 }
 
