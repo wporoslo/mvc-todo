@@ -22,6 +22,8 @@ class Model {
       complete: false,
     });
 
+    console.log('added todo');
+
     this._commit(this.todos);
   }
 
@@ -45,7 +47,7 @@ class Model {
   }
 
   bindTodoListChanged(callback) {
-    this._commit = callback;
+    this.onTodoListChanged = callback;
   }
 }
 
@@ -174,13 +176,13 @@ class View {
 
   //'focusout' to prevent re-rendering on every keystroke
   bindEditTodo(handler) {
-    this.todoList.addEventListener('focusout', event => {
+    this.todoList.addEventListener('focusout', (event) => {
       if (this._temporaryTodoText) {
         const id = event.target.parentElement.id;
         handler(id, this._temporaryTodoText);
         this._temporaryTodoText = '';
       }
-    })
+    });
   }
 }
 
