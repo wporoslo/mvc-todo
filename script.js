@@ -1,30 +1,50 @@
 class Model {
   constructor() {
     this.todos = [
-      { id: 1, text: 'Run a marathon', complete: false },
-      { id: 2, text: 'Learn MVC architecture', complete: false },
+      { id: this.generateId(), text: 'Run a marathon', complete: false },
+      { id: this.generateId(), text: 'Learn MVC architecture', complete: false },
     ];
   }
 
   addTodo(todoText) {
     this.todos.push({
-      id: this.todos ? this.todos.length + 1 : 1,
+      id: this.generateId(),
       text: todoText,
       complete: false,
     });
+
+    this.onTodoListChanged(this.todos);
   }
 
   editTodo(id, updatedText) {
-    this.todos.at(id - 1).text = updatedText;
+    this._getTodo(id).text = updatedText;
+
+    this.onTodoListChanged(this.todos);
   }
 
   deleteTodo(id) {
     this.todos = this.todos.filter((todo) => todo.id !== id);
+
+    this.onTodoListChanged(this.todos);
   }
 
   toggleTodo(id) {
-    const todo = this.todos.at(id - 1);
+    const todo = this._getTodo(id);
     todo.complete = !todo.complete;
+
+    this.onTodoListChanged(this.todos);
+  }
+
+  bindTodoListChanged(callback) {
+    this.onTodoListChanged = callback;
+  }
+
+  _getTodo(id) {
+    return this.todos.find(todo => todo.id === id)
+  }
+
+  _generateId() {
+    return crypto.randomUUID()
   }
 }
 
@@ -108,6 +128,36 @@ class View {
       });
     }
   }
+
+  bindAddTodo(handler) {
+    this.form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      if (this._todoText) {
+        handler(this._todoText);
+        this._resetInput();
+      }
+    });
+  }
+
+  bindDeleteTodo(handler) {
+    this.todoList.addEventListener('click', (event) => {
+      if (event.target.className === 'delete') {
+        const id = event.target.parentElement.id;
+        handler(id);
+      }
+    });
+  }
+
+  bindToggleTodo(handler) {
+    this.todoList.addEventListener('change', (event) => {
+      if (event.target.type === 'checkbox') {
+        const id = event.target.parentElement.id;
+
+        handler(id);
+      }
+    });
+  }
 }
 
 class Controller {
@@ -116,6 +166,10 @@ class Controller {
     this.view = view;
 
     this.onTodoListChanged(this.model.todos);
+    this.view.bindAddTodo(this.handleAddTodo);
+    this.view.bindDeleteTodo(this.handleDeleteTodo);
+    this.view.bindToggleTodo(this.handleToggleTodo);
+    this.model.bindTodoListChanged(this.onTodoListChanged);
   }
 
   onTodoListChanged = (todos) => {
