@@ -1,0 +1,22 @@
+{
+  "name": "DoThis",
+  "short_name": "DoThis",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "white",
+  "scope": ".",
+  "description": "To-do app",
+  "icons": [
+    {
+      "src": "images/todo-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "images/todo-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
