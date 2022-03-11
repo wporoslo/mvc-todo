@@ -232,7 +232,7 @@ async function registerSW() {
     try {
       await navigator
             .serviceWorker
-            .register('src/serviceworker.js');
+            .register('./serviceworker.js');
     }
     catch (e) {
       console.log('SW registration failed');
