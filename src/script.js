@@ -221,3 +221,21 @@ class Controller {
 }
 
 const app = new Controller(new Model(), new View());
+
+//register service worker
+
+window.addEventListener('load', () => {
+  registerSW();
+});
+async function registerSW() {
+  if ('serviceWorker' in navigator) {
+    try {
+      await navigator
+            .serviceWorker
+            .register('src/serviceworker.js');
+    }
+    catch (e) {
+      console.log('SW registration failed');
+    }
+  }
+}
