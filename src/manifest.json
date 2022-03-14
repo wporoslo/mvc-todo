@@ -9,9 +9,9 @@
   "description": "To-do app",
   "icons": [
     {
-      "src": "images/todo-192x192.png",
+      "src": "/images/todo-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "/image/png"
     },
     {
       "src": "images/todo-512x512.png",
