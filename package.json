@@ -2,7 +2,7 @@
   "name": "todo-mvc",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "script.js",
   "scripts": {
     "start": "vite --host",
     "build": "vite build"
